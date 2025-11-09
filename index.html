@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinHelp - Financial Chatbot Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-white text-gray-900">
+    <div class="flex h-screen w-full">
+        
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-80 flex-shrink-0 bg-gray-50 border-r border-gray-200 p-6 flex flex-col gap-6 overflow-y-auto">
+            <h1 class="text-2xl font-bold text-gray-800" data-i18n="sidebarTitle">Financial Chatbot</h1>
+
+            <!-- Language Selector -->
+            <div id="language-selector" class="flex flex-col items-stretch gap-2">
+                <span class="font-medium text-gray-700 text-sm mb-1" data-i18n="langPrompt">Choose Language:</span>
+                <button data-lang="en" class="lang-btn px-4 py-2 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all ring-2 ring-offset-2 ring-transparent focus:ring-blue-500 text-left flex justify-start">
+                    English
+                </button>
+                <button data-lang="hi" class="lang-btn px-4 py-2 rounded-lg font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all ring-2 ring-offset-2 ring-transparent focus:ring-gray-400 text-left flex justify-start">
+                    हिंदी (Hindi)
+                </button>
+                <button data-lang="or" class="lang-btn px-4 py-2 rounded-lg font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all ring-2 ring-offset-2 ring-transparent focus:ring-gray-400 text-left flex justify-start">
+                    ଓଡ଼ିଆ (Odia)
+                </button>
+            </div>
+
+            <!-- User Profile -->
+            <div class="relative">
+                <div id="user-profile" class="hidden border border-gray-200 bg-white rounded-lg p-3 cursor-pointer">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center">
+                            <span class="text-lg">👤</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold">Risk: <span id="risk-level" class="font-bold">Not set</span></p>
+                            <p class="text-xs">Goals: <span id="goals-count" class="font-bold">0</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <div id="achievements" class="hidden absolute top-full mt-2 left-0 bg-white text-gray-800 rounded-lg shadow-xl p-4 w-64 z-40">
+                    <h4 class="font-semibold text-sm mb-2">Your Achievements</h4>
+                    <div class="space-y-2">
+                        <div id="achieve-goal" class="flex items-center gap-2 opacity-30">
+                            <span class="text-lg">🎯</span>
+                            <span class="text-xs">Goal Setter</span>
+                        </div>
+                        <div id="achieve-risk" class="flex items-center gap-2 opacity-30">
+                            <span class="text-lg">⚖️</span>
+                            <span class="text-xs">Risk Assessed</span>
+                        </div>
+                        <div id="achieve-invest" class="flex items-center gap-2 opacity-30">
+                            <span class="text-lg">💡</span>
+                            <span class="text-xs">Smart Investor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Tracker -->
+            <div id="progress-tracker" class="hidden bg-blue-50 p-4 border border-blue-200 rounded-lg">
+                <div class="flex flex-col items-start gap-3 text-sm">
+                    <span class="font-medium text-blue-800">Financial Profile Progress:</span>
+                    <div class="flex flex-col gap-2 w-full">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-gray-300 rounded-full step-dot" data-step="goal"></div>
+                            <span class="text-xs text-gray-600">Goal</span>
+                        </div>
+                         <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-gray-300 rounded-full step-dot" data-step="time"></div>
+                            <span class="text-xs text-gray-600">Time</span>
+                        </div>
+                         <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-gray-300 rounded-full step-dot" data-step="risk"></div>
+                            <span class="text-xs text-gray-600">Risk</span>
+                        </div>
+                         <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-gray-300 rounded-full step-dot" data-step="recommendation"></div>
+                            <span class="text-xs text-gray-600">Plan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Calculators -->
+            <div id="tools-section" class="border-t border-gray-200 pt-6">
+                <h3 class="font-semibold text-gray-700 mb-3" data-i18n="toolsTitle">Quick Financial Tools</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button data-tool="sip" class="tool-btn p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-300 transition-all text-sm flex flex-col items-center gap-1 shadow-sm hover:shadow-md">
+                        <span>💰</span>
+                        <span class="font-medium" data-i18n="tools.sip">SIP Calculator</span>
+                    </button>
+                    <button data-tool="emi" class="tool-btn p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-300 transition-all text-sm flex flex-col items-center gap-1 shadow-sm hover:shadow-md">
+                        <span>🏠</span>
+                        <span class="font-medium" data-i18n="tools.emi">EMI Calculator</span>
+                    </button>
+                    <button data-tool="fd" class="tool-btn p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-300 transition-all text-sm flex flex-col items-center gap-1 shadow-sm hover:shadow-md">
+                        <span>📈</span>
+                        <span class="font-medium" data-i18n="tools.fd">FD Returns</span>
+                    </button>
+                    <button data-tool="goal" class="tool-btn p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-300 transition-all text-sm flex flex-col items-center gap-1 shadow-sm hover:shadow-md">
+                        <span>🎯</span>
+                        <span class="font-medium" data-i18n="tools.goal">Goal Planner</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="flex-1 flex flex-col h-screen bg-white relative">
+            
+            <!-- Session Restore Prompt -->
+            <div id="session-prompt" class="hidden absolute top-0 left-0 w-full p-3 bg-yellow-100 text-yellow-900 z-50 shadow">
+                <div class="flex justify-between items-center max-w-3xl mx-auto">
+                    <p class="text-sm font-medium">Welcome back! Want to continue your last session?</p>
+                    <div>
+                        <button id="session-yes" class="px-3 py-1 bg-green-600 text-white rounded text-sm font-semibold hover:bg-green-700">Yes, continue</button>
+                        <button id="session-no" class="ml-2 px-3 py-1 bg-gray-300 text-gray-800 rounded text-sm hover:bg-gray-400">No, start new</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Window -->
+            <div id="chat-window" class="flex-1 p-6 overflow-y-auto bg-white">
+                <div id="chat-message-list" class="max-w-3xl mx-auto space-y-4">
+                    <!-- Chat messages will be appended here -->
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-4 border-t border-gray-200 bg-white">
+                <div class="max-w-3xl mx-auto">
+                    <!-- Loading & Error Display -->
+                    <div id="status-area" class="p-0 mb-2">
+                        <div id="loading-indicator" class="hidden items-center gap-2 text-gray-500">
+                            <div class="typing-indicator">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                            <span>FinHelp is typing...</span>
+                        </div>
+                        <div id="error-message" class="hidden text-red-600 font-medium p-3 bg-red-50 rounded-lg">
+                            <!-- Error content will be set by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Input Form -->
+                    <form id="chat-form" class="flex items-center relative">
+                        <input 
+                            type="text" 
+                            id="chat-input" 
+                            placeholder="Type or speak your message..." 
+                            autocomplete="off"
+                            class="flex-1 px-5 py-3 pr-24 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >
+                        
+                        <!-- Button Wrapper -->
+                        <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                            <!-- Voice Input Button -->
+                            <button 
+                                type="button" 
+                                id="mic-button"
+                                title="Speak your message"
+                                class="p-2.5 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition-all focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:bg-gray-300"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                                <path d="M7 4a3 3 0 016 0v6a3 3 0 11-6 0V4z" />
+                                <path d="M5.5 8.5A.5.5 0 016 9v1a4 4 0 004 4 4 4 0 004-4V9a.5.5 0 011 0v1a5 5 0 01-4.5 4.975V17h3a.5.5 0 010 1h-7a.5.5 0 010-1h3v-2.025A5 5 0 015 10V9a.5.5 0 01.5-.5z" />
+                                </svg>
+                            </button>
+                            <button 
+                                type="submit" 
+                                id="send-button"
+                                class="p-2.5 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                                <path d="M3.105 2.288a.75.75 0 00-.826.95l1.414 4.925A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.087l-1.414 4.925a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.897 28.897 0 003.105 2.288z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculator Modal -->
+    <div id="calculator-modal" class="hidden">
+        <div id="calculator-modal-content">
+            <div id="calculator-modal-header" class="flex justify-between items-center p-4 border-b">
+                <h3 id="calculator-modal-title" class="text-lg font-semibold"></h3>
+                <button id="calculator-modal-close" class="text-gray-500 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                        <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                    </svg>
+                </button>
+            </div>
+            <div id="calculator-modal-body" class="p-6">
+                <!-- Calculator content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculator HTML Templates -->
+    <script type="text/html-template" id="sip-calc-template">
+        <form id="sip-form" class="space-y-4">
+            <div>
+                <label for="sip-investment" class="block text-sm font-medium text-gray-700" data-i18n="calculator.sip.investment">Monthly Investment (₹)</label>
+                <input type="number" id="sip-investment" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div>
+                <label for="sip-rate" class="block text-sm font-medium text-gray-700" data-i18n="calculator.sip.rate">Expected Return Rate (% p.a.)</label>
+                <input type="number" id="sip-rate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div>
+                <label for="sip-years" class="block text-sm font-medium text-gray-700" data-i18n="calculator.sip.years">Time Period (Years)</label>
+                <input type="number" id="sip-years" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700" data-i18n="calculator.calculate">Calculate</button>
+            <div id="sip-result" class="calculator-result hidden"></div>
+        </form>
+    </script>
+
+    <script type="text/html-template" id="emi-calc-template">
+        <form id="emi-form" class="space-y-4">
+            <div>
+                <label for="emi-amount" class="block text-sm font-medium text-gray-700" data-i18n="calculator.emi.amount">Loan Amount (₹)</label>
+                <input type="number" id="emi-amount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div>
+                <label for="emi-rate" class="block text-sm font-medium text-gray-700" data-i18n="calculator.emi.rate">Interest Rate (% p.a.)</label>
+                <input type="number" id="emi-rate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div>
+                <label for="emi-months" class="block text-sm font-medium text-gray-700" data-i18n="calculator.emi.months">Loan Tenure (Months)</label>
+                <input type="number" id="emi-months" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700" data-i18n="calculator.calculate">Calculate</button>
+            <div id="emi-result" class="calculator-result hidden"></div>
+        </form>
+    </script>
+
+    <script type="text/html-template" id="fd-calc-template">
+        <form id="fd-form" class="space-y-4">
+            <div>
+                <label for="fd-amount" class="block text-sm font-medium text-gray-700" data-i18n="calculator.fd.amount">Total Investment (₹)</label>
+                <input type="number" id="fd-amount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div>
+                <label for="fd-rate" class="block text-sm font-medium text-gray-700" data-i18n="calculator.fd.rate">Interest Rate (% p.a.)</label>
+                <input type="number" id="fd-rate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div>
+                <label for="fd-years" class="block text-sm font-medium text-gray-700" data-i18n="calculator.fd.years">Time Period (Years)</label>
+                <input type="number" id="fd-years" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700" data-i18n="calculator.calculate">Calculate</button>
+            <div id="fd-result" class="calculator-result hidden"></div>
+        </form>
+    </script>
+
+    <script type="text/html-template" id="goal-calc-template">
+        <form id="goal-form" class="space-y-4">
+            <div>
+                <label for="goal-target" class="block text-sm font-medium text-gray-700" data-i18n="calculator.goal.target">Target Amount (₹)</label>
+                <input type="number" id="goal-target" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+             <div>
+                <label for="goal-years" class="block text-sm font-medium text-gray-700" data-i18n="calculator.goal.years">Time Period (Years)</label>
+                <input type="number" id="goal-years" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <div>
+                <label for="goal-rate" class="block text-sm font-medium text-gray-700" data-i18n="calculator.goal.rate">Expected Return Rate (% p.a.)</label>
+                <input type="number" id="goal-rate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+            </div>
+            <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700" data-i18n="calculator.calculate">Calculate</button>
+            <div id="goal-result" class="calculator-result hidden"></div>
+        </form>
+    </script>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/calculators.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/speech.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
